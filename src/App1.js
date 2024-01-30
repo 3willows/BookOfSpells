@@ -16,7 +16,7 @@ export default function App() {
         console.error("Error fetching data:", error)
       }
     }
-    fetchData()
+    // fetchData()
   }, [])
 
   const cleanedData = data
@@ -31,11 +31,15 @@ export default function App() {
       <h1>Book of Spells</h1>
       <h2>by</h2>
       <h2>Miranda Goshawk</h2>
-      <div className="spell-container ">
+      {
+        data ?       <div className="spell-container ">
         {cleanedData?.map((obj) => (
           <Spell name={obj.name} incantation={obj.incantation} key={obj.id} />
         ))}
-      </div>
+      </div> :
+      <h1     style={{ fontFamily: "Cormorant Garamond" }}>Like a portkey gone astray, the API has eluded our grasp. </h1>
+      }
+
       <h2>
         Api from{" "}
         <a
