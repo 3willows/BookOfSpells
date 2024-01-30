@@ -36,6 +36,37 @@ export default function App() {
           <Spell name={obj.name} incantation={obj.incantation} key={obj.id} />
         ))}
       </div>
+      <h2>
+        Api from{" "}
+        <a
+          href="https://github.com/MossPiglets/WizardWorldAPI"
+          target="_blank"
+          rel="noreferrer"
+        >
+          MossPiglets
+        </a>
+      </h2>
+      <h2>
+        Font from{" "}
+        <a
+          href="https://fonts.google.com/specimen/Cedarville+Cursive/about?query=Cedarville+Cursive"
+          target="_blank"
+          rel="noreferrer"
+          style={{ fontFamily: "Cedarville Cursive" }}
+        >
+          Kimberly Geswein
+        </a> &
+      </h2>
+      <h2>
+        {" "}
+        <a
+          href="https://fonts.google.com/specimen/Cormorant+Garamond/about?query=Christian+Thalmann"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Christian Thalmann{" "}
+        </a>
+      </h2>
     </>
   )
 }
