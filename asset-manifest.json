@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/BookOfSpells/static/css/main.1bfbad5e.css",
+    "main.js": "/BookOfSpells/static/js/main.2602dee3.js",
+    "static/js/787.31cd56ee.chunk.js": "/BookOfSpells/static/js/787.31cd56ee.chunk.js",
+    "index.html": "/BookOfSpells/index.html",
+    "main.1bfbad5e.css.map": "/BookOfSpells/static/css/main.1bfbad5e.css.map",
+    "main.2602dee3.js.map": "/BookOfSpells/static/js/main.2602dee3.js.map",
+    "787.31cd56ee.chunk.js.map": "/BookOfSpells/static/js/787.31cd56ee.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1bfbad5e.css",
+    "static/js/main.2602dee3.js"
+  ]
+}
