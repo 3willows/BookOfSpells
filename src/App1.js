@@ -56,5 +56,5 @@ function Spell({ name, incantation }) {
 }
 
 function Incantation({ incantation }) {
-  return <p>{incantation}</p>
+  return <>{incantation}</>
 }
