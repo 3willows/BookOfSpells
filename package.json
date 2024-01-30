@@ -2,7 +2,8 @@
   "name": "dplawrapper",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
+  "proxy": "https://api.dp.la/v2/items?api_key=1af8b1be53d65365e854bcf6d83b2e27", 
+   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
