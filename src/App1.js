@@ -16,19 +16,37 @@ export default function App() {
       }
     }
     fetchData()
-    console.log(data)
+    // console.log(data?.data[0])
   }, [searchTerm])
 
   const handleChange = (e) => {
     setSearchTerm((prev) => e.target.value)
+    // console.log(filteredData)
   }
+
+  const renderedData = data?.data.map((book) => {
+    return <li key={book.id}>{book?.attributes.title}</li>
+  })
+
+  const filteredBooks = data?.data.filter((book) => {
+    return book?.attributes?.title.includes(searchTerm)
+  })
+
+  const filteredData = filteredBooks?.map((book) => {
+    return <li key={book.id}>{book?.attributes.title}</li>
+  })
 
   return (
     <>
       <p>Search Potter DB website</p>
-      <p className="">{data?.data?.id}</p>
-      <p className="">{searchTerm}</p>
+      <p>{data && `Books`}</p>
+      <p className="">{renderedData}</p>
+      <p>Filtered Data of Books</p>
+      <p className="">
+        Enter search term{searchTerm && ":"} {searchTerm}
+      </p>{" "}
       <input onChange={handleChange}></input>
+      <p className="">{filteredData}</p>
     </>
   )
 }
