@@ -3,13 +3,12 @@ import "./App.css"
 
 export default function App() {
   const [data, setData] = useState(null)
+  const [searchTerm, setSearchTerm] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `https://wizard-world-api.herokuapp.com/Spells`
-        )
+        const response = await fetch(`https://api.potterdb.com/v1/books`)
         const result = await response.json()
         setData(result)
       } catch (error) {
@@ -17,79 +16,19 @@ export default function App() {
       }
     }
     fetchData()
-  }, [])
+    console.log(data)
+  }, [searchTerm])
 
-  const cleanedData = data
-    ?.filter(
-      (obj) =>
-        !obj.name.includes(obj.incantation) && obj.name && obj.incantation
-    )
-    .sort((a, b) => a.name.localeCompare(b.name))
+  const handleChange = (e) => {
+    setSearchTerm((prev) => e.target.value)
+  }
 
   return (
     <>
-      <h1>Book of Spells</h1>
-      <h2>by</h2>
-      <h2>Miranda Goshawk</h2>
-      {
-        data ?       <div className="spell-container ">
-        {cleanedData?.map((obj) => (
-          <Spell name={obj.name} incantation={obj.incantation} key={obj.id} />
-        ))}
-      </div> :
-      <h1     style={{ fontFamily: "Cormorant Garamond" }}>Like a portkey gone astray, the API has eluded our grasp. </h1>
-      }
-
-      <h2>
-        Api from{" "}
-        <a
-          href="https://github.com/MossPiglets/WizardWorldAPI"
-          target="_blank"
-          rel="noreferrer"
-        >
-          MossPiglets
-        </a>
-      </h2>
-      <h2>
-        Font from{" "}
-        <a
-          href="https://fonts.google.com/specimen/Cedarville+Cursive/about?query=Cedarville+Cursive"
-          target="_blank"
-          rel="noreferrer"
-          style={{ fontFamily: "Cedarville Cursive" }}
-        >
-          Kimberly Geswein
-        </a> &
-      </h2>
-      <h2>
-        {" "}
-        <a
-          href="https://fonts.google.com/specimen/Cormorant+Garamond/about?query=Christian+Thalmann"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Christian Thalmann{" "}
-        </a>
-      </h2>
+      <p>Search Potter DB website</p>
+      <p className="">{data?.data?.id}</p>
+      <p className="">{searchTerm}</p>
+      <input onChange={handleChange}></input>
     </>
   )
-}
-
-function Spell({ name, incantation }) {
-  const [clicked, setClicked] = useState(false)
-  function toggleClicked() {
-    setClicked((clicked) => !clicked)
-  }
-  return (
-    <div>
-      <button onClick={toggleClicked}>
-        {!clicked && name}
-        {clicked && <Incantation incantation={incantation} />}{" "}
-      </button>
-    </div>
-  )
-}
-
-function Incantation({ incantation }) {
-  return <>{incantation}</>
 }
