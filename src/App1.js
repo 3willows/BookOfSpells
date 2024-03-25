@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback } from "react"
 import "./App.css"
 
 export default function App() {
-  const [data, setData] = useState(null)
+  const [input, setInput] = useState(null)
 
-  const [attribute, setAttribute] = useState("id")
+  // const [attribute, setAttribute] = useState("id")
   const [endpoint, setEndpoint] = useState("books")
 
   const [searchTerm, setSearchTerm] = useState(null)
@@ -12,39 +12,70 @@ export default function App() {
   const fetchData = useCallback(async () => {
     const response = await fetch(`https://api.potterdb.com/v1/${endpoint}`)
     const result = await response.json()
-    setData(result)
+    setInput(result)
   }, [endpoint])
 
   useEffect(() => {
     fetchData()
   }, [fetchData, endpoint])
 
-  const handleChange = (e) => {
+  // search
+
+  const handleSearchChange = (e) => {
     setSearchTerm((prev) => e.target.value)
   }
 
-  const renderedData = data?.data.map((book) => {
-    return <li key={book.id}>{book?.id}</li>
-  })
+  const handleEndpointChange = (e) => {
+    setEndpoint((prev) => e.target.value)
+  }
 
-  const filteredBooks = data?.data.filter((book) => {
-    if (searchTerm === "") {
+  // Display
+
+  const renderData = 
+    input?.data?.map((data) => {
+      if (endpoint === "books") {
+        return <li key={data.id}>{data?.attributes?.title}</li>
+      }
+      if (endpoint === "characters") {
+        return <li key={data.id}>{data?.attributes?.name}</li>
+      }
+      return <li key={data.id}>{data?.id}</li>
+    })
+
+  const renderSearchResults = 
+    input?.data?.map((data) => {
+      if (searchTerm === ""){
+        return null
+      }
+      if (
+        endpoint === "books" &&
+        data?.attributes?.title?.includes(searchTerm)
+      ) {
+        return <li key={data.id}>{data?.attributes?.title}</li>
+      }
+      if (endpoint === "characters"
+      &&
+        data?.attributes?.name?.includes(searchTerm)) {
+        return <li key={data.id}>{data?.attributes?.name}</li>
+      }
       return null
-    }
-    return book?.id?.includes(searchTerm)
-  })
-
-  const filteredData = filteredBooks?.map((book) => {
-    return <li key={book.id}>{book?.id}</li>
-  })
+    })
 
   return (
     <>
-      <p>Search Potter DB website</p>{" "}
+      <h3>Search Potter DB website</h3>
+      <form onChange={handleEndpointChange}>
+        <select>
+          <option value="books">Books</option>
+          <option value="characters">Characters</option>
+        </select>
+      </form>
+
       <p className="">
-        Enter search term{searchTerm && ":"} {searchTerm}
+        Search Term{searchTerm && ":"} {searchTerm}
       </p>
-      <input onChange={handleChange}></input>
+      <input onChange={handleSearchChange}></input>
+
       <div
         style={{
           display: "flex",
@@ -52,12 +83,12 @@ export default function App() {
         }}
       >
         <div className="">
-          <p>{data && `Everything`}</p>
-          <p className="">{renderedData}</p>
+          <p>{input && `Everything`}</p>
+          <p className="">{renderData}</p>
         </div>
         <div className="">
           <p>Filtered Data </p>
-          <p className="">{filteredData}</p>
+          <p className="">{renderSearchResults}</p>
         </div>
       </div>
     </>
