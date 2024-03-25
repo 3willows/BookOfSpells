@@ -5,50 +5,46 @@ export default function App() {
   const [data, setData] = useState(null)
   const [searchTerm, setSearchTerm] = useState(null)
 
-  const logging = useCallback(() => console.log(data?.data[0]))
+  const fetchData = useCallback(async () => {
+    const response = await fetch(`https://api.potterdb.com/v1/characters`)
+    const result = await response.json()
+    setData(result)
+  }, [])
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`https://api.potterdb.com/v1/characters`)
-        const result = await response.json()
-        setData(result)
-      } catch (error) {
-        console.error("Error fetching data:", error)
-      }
-    }
     fetchData()
-    logging()
-  }, [searchTerm, logging])
+  }, [fetchData])
 
   const handleChange = (e) => {
     setSearchTerm((prev) => e.target.value)
-    // console.log(filteredData)
   }
 
   const renderedData = data?.data.map((book) => {
-    return <li key={book.id}>{book?.attributes.name}</li>
+    return <li key={book.id}>{book?.id}</li>
   })
 
   const filteredBooks = data?.data.filter((book) => {
-    return book?.attributes?.name.includes(searchTerm)
+    if (searchTerm === ""){
+      return null
+    }
+    return book?.id.includes(searchTerm)
   })
 
   const filteredData = filteredBooks?.map((book) => {
-    return <li key={book.id}>{book?.attributes.name}</li>
+    return <li key={book.id}>{book?.id}</li>
   })
 
   return (
     <>
-      <p>Search Potter DB website</p>
-      <p>{data && `Books`}</p>
-      <p className="">{renderedData}</p>
-      <p>Filtered Data of Books</p>
+      <p>Filtered Data </p>
+      <p className="">{filteredData}</p>
       <p className="">
         Enter search term{searchTerm && ":"} {searchTerm}
-      </p>{" "}
+      </p>
       <input onChange={handleChange}></input>
-      <p className="">{filteredData}</p>
+      <p>Search Potter DB website</p>
+      <p>{data && `Everything`}</p>
+      <p className="">{renderedData}</p>
     </>
   )
 }
