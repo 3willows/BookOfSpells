@@ -48,21 +48,34 @@ export default function App() {
     if (searchTerm === "") {
       return null
     }
-    if (endpoint === "books" && data?.attributes?.title?.includes(searchTerm)) {
-      return <li key={data.id}>{data?.attributes?.title}</li>
+    if (endpoint === "books" || endpoint === "movies") {      return (
+        data?.attributes?.title?.includes(searchTerm) && (
+          <li key={data.id}>{data?.attributes?.title}</li>
+        )
+      )
     }
     if (
-      endpoint === "characters" &&
-      data?.attributes?.name?.includes(searchTerm)
+      endpoint === "characters" ||
+      endpoint === "potions" ||
+      endpoint === "spells"
     ) {
-      return <li key={data.id}>{data?.attributes?.name}</li>
+      return (
+        data?.attributes?.name?.includes(searchTerm) && (
+          <li key={data.id}>{data?.attributes?.name}</li>
+        )
+      )
     }
     return null
   })
 
-  // const renderedAttribtues = Object.getOwnPropertyNames(
-  //   input?.data[0]?.attributes
-  // ).map((attribute) => <li key={attribute}>{attribute}</li>)
+  const renderedAttribtues = () => {
+    if (input.data[0].attributes) {
+      return Object.getOwnPropertyNames(input?.data[0]?.attributes).map(
+        (attribute) => <li key={attribute}>{attribute}</li>
+      )
+    }
+    return null
+  }
 
   return (
     <>
@@ -92,7 +105,7 @@ export default function App() {
         {" "}
         <div className="">
           <p>Available attributes: </p>
-          <p>{input?.data[0]?.attributes && "hello!"}</p>
+          <p>{input?.data[0]?.attributes && renderedAttribtues()}</p>
         </div>
         <div className="">
           <p>{input && `Everything`}</p>
