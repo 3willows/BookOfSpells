@@ -24,7 +24,7 @@ export default function App() {
   })
 
   const filteredBooks = data?.data.filter((book) => {
-    if (searchTerm === ""){
+    if (searchTerm === "") {
       return null
     }
     return book?.id.includes(searchTerm)
@@ -36,15 +36,26 @@ export default function App() {
 
   return (
     <>
-      <p>Filtered Data </p>
-      <p className="">{filteredData}</p>
+      <p>Search Potter DB website</p>{" "}
       <p className="">
         Enter search term{searchTerm && ":"} {searchTerm}
       </p>
       <input onChange={handleChange}></input>
-      <p>Search Potter DB website</p>
-      <p>{data && `Everything`}</p>
-      <p className="">{renderedData}</p>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around"
+        }}
+      >
+        <div className="">
+          <p>{data && `Everything`}</p>
+          <p className="">{renderedData}</p>
+        </div>
+        <div className="">
+          <p>Filtered Data </p>
+          <p className="">{filteredData}</p>
+        </div>
+      </div>
     </>
   )
 }
