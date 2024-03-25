@@ -3,17 +3,21 @@ import "./App.css"
 
 export default function App() {
   const [data, setData] = useState(null)
+
+  const [attribute, setAttribute] = useState("id")
+  const [endpoint, setEndpoint] = useState("books")
+
   const [searchTerm, setSearchTerm] = useState(null)
 
   const fetchData = useCallback(async () => {
-    const response = await fetch(`https://api.potterdb.com/v1/characters`)
+    const response = await fetch(`https://api.potterdb.com/v1/${endpoint}`)
     const result = await response.json()
     setData(result)
-  }, [])
+  }, [endpoint])
 
   useEffect(() => {
     fetchData()
-  }, [fetchData])
+  }, [fetchData, endpoint])
 
   const handleChange = (e) => {
     setSearchTerm((prev) => e.target.value)
@@ -27,7 +31,7 @@ export default function App() {
     if (searchTerm === "") {
       return null
     }
-    return book?.id.includes(searchTerm)
+    return book?.id?.includes(searchTerm)
   })
 
   const filteredData = filteredBooks?.map((book) => {
@@ -44,7 +48,7 @@ export default function App() {
       <div
         style={{
           display: "flex",
-          justifyContent: "space-around"
+          justifyContent: "space-around",
         }}
       >
         <div className="">
