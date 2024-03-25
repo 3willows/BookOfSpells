@@ -31,10 +31,14 @@ export default function App() {
   // Display
 
   const renderData = input?.data?.map((data) => {
-    if (endpoint === "books") {
+    if (endpoint === "books" || endpoint === "movies") {
       return <li key={data.id}>{data?.attributes?.title}</li>
     }
-    if (endpoint === "characters") {
+    if (
+      endpoint === "characters" ||
+      endpoint === "potions" ||
+      endpoint === "spells"
+    ) {
       return <li key={data.id}>{data?.attributes?.name}</li>
     }
     return <li key={data.id}>{data?.id}</li>
@@ -56,22 +60,23 @@ export default function App() {
     return null
   })
 
+  // const renderedAttribtues = Object.getOwnPropertyNames(
+  //   input?.data[0]?.attributes
+  // ).map((attribute) => <li key={attribute}>{attribute}</li>)
+
   return (
     <>
       <h3>Search Potter DB website</h3>
 
       <form onChange={handleEndpointChange}>
         <select>
-          <option value="books">Books</option>
-          <option value="characters">Characters</option>
+          <option value="books">books</option>
+          <option value="characters">characters</option>
+          <option value="movies">movies</option>
+          <option value="potions">potions</option>
+          <option value="spells">spells</option>
         </select>
       </form>
-
-      <p>
-        Available attributes:{" "}
-        {input?.data[0].attributes &&
-          Object.getOwnPropertyNames(input?.data[0].attributes).toString()}
-      </p>
 
       <p className="">
         Search Term{searchTerm && ":"} {searchTerm}
@@ -84,6 +89,11 @@ export default function App() {
           justifyContent: "space-around",
         }}
       >
+        {" "}
+        <div className="">
+          <p>Available attributes: </p>
+          <p>{input?.data[0]?.attributes && "hello!"}</p>
+        </div>
         <div className="">
           <p>{input && `Everything`}</p>
           <p className="">{renderData}</p>
