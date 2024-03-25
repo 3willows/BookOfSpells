@@ -1,14 +1,16 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import "./App.css"
 
 export default function App() {
   const [data, setData] = useState(null)
   const [searchTerm, setSearchTerm] = useState(null)
 
+  const logging = useCallback(() => console.log(data?.data[0]))
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://api.potterdb.com/v1/books`)
+        const response = await fetch(`https://api.potterdb.com/v1/characters`)
         const result = await response.json()
         setData(result)
       } catch (error) {
@@ -16,8 +18,8 @@ export default function App() {
       }
     }
     fetchData()
-    // console.log(data?.data[0])
-  }, [searchTerm])
+    logging()
+  }, [searchTerm, logging])
 
   const handleChange = (e) => {
     setSearchTerm((prev) => e.target.value)
@@ -25,15 +27,15 @@ export default function App() {
   }
 
   const renderedData = data?.data.map((book) => {
-    return <li key={book.id}>{book?.attributes.title}</li>
+    return <li key={book.id}>{book?.attributes.name}</li>
   })
 
   const filteredBooks = data?.data.filter((book) => {
-    return book?.attributes?.title.includes(searchTerm)
+    return book?.attributes?.name.includes(searchTerm)
   })
 
   const filteredData = filteredBooks?.map((book) => {
-    return <li key={book.id}>{book?.attributes.title}</li>
+    return <li key={book.id}>{book?.attributes.name}</li>
   })
 
   return (
