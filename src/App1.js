@@ -1,151 +1,95 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import "./App.css"
 
 export default function App() {
-  const [input, setInput] = useState(null)
-  const [endpoint, setEndpoint] = useState("books")
-
-  const [searchTerm, setSearchTerm] = useState(null)
-  const [attribute, setAttribute] = useState("slug")
-
-  const fetchData = useCallback(async () => {
-    const response = await fetch(`https://api.potterdb.com/v1/${endpoint}`)
-    const result = await response.json()
-    setInput(result)
-  }, [endpoint])
+  const [data, setData] = useState(null)
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `https://wizard-world-api.herokuapp.com/Spells`
+        )
+        const result = await response.json()
+        setData(result)
+      } catch (error) {
+        console.error("Error fetching data:", error)
+      }
+    }
     fetchData()
-  }, [fetchData, endpoint])
+  }, [])
 
-  // search
-
-  const handleEndpointChange = (e) => {
-    setEndpoint((prev) => e.target.value)
-  }
-
-  const handleSearchChange = (e) => {
-    setSearchTerm((prev) => e.target.value)
-  }
-
-  const handleAttributeChange = (e) => {
-    setAttribute((prev) => e.target.value)
-  }
-  // Display
-
-  const renderData = input?.data?.map((data) => {
-    if (endpoint === "books" || endpoint === "movies") {
-      return <li key={data.id}>{data?.attributes?.title}</li>
-    }
-    if (
-      endpoint === "characters" ||
-      endpoint === "potions" ||
-      endpoint === "spells"
-    ) {
-      return <li key={data.id}>{data?.attributes?.name}</li>
-    }
-    return <li key={data.id}>{data?.id}</li>
-  })
-
-  const renderSearchResults = input?.data?.map((data) => {
-    if (searchTerm === "") {
-      return null
-    }
-    if (endpoint === "books" || endpoint === "movies") {
-      return (
-        data?.attributes?.title?.includes(searchTerm) && (
-          <li key={data.id}>{data?.attributes?.title}</li>
-        )
-      )
-    }
-    if (
-      endpoint === "characters" ||
-      endpoint === "potions" ||
-      endpoint === "spells"
-    ) {
-      return (
-        data?.attributes?.name?.includes(searchTerm) && (
-          <li key={data.id}>{data?.attributes?.name}</li>
-        )
-      )
-    }
-    return null
-  })
-
-  const renderSearchAttribute = input?.data?.map((data) => {
-    if (searchTerm === "") {
-      return  <li key={data.id}>{data?.attributes[attribute]}</li> 
-    }
-    if (endpoint === "books" || endpoint === "movies") {
-      return (
-        data?.attributes?.title?.includes(searchTerm) && (
-          <li key={data.id}>{data?.attributes[attribute]}</li>
-        )
-      )
-    }
-    if (
-      endpoint === "characters" ||
-      endpoint === "potions" ||
-      endpoint === "spells"
-    ) {
-      return (
-        data?.attributes?.name?.includes(searchTerm) && (
-          <li key={data.id}>{data?.attributes[attribute]}</li>
-        )
-      )
-    }
-    return null
-  })
-
-  const availableAttributes = () => {
-    if (input.data[0].attributes) {
-      return Object.getOwnPropertyNames(input?.data[0]?.attributes).map(
-        (attribute) => (
-          <option key={attribute} value={attribute}>
-            {attribute}
-          </option>
-        )
-      )
-    }
-    return null
-  }
+  const cleanedData = data
+    ?.filter(
+      (obj) =>
+        !obj.name.includes(obj.incantation) && obj.name && obj.incantation
+    )
+    .sort((a, b) => a.name.localeCompare(b.name))
 
   return (
     <>
-      <h3>Search Potter DB website</h3>
+      <h1>Book of Spells</h1>
+      <h2>by</h2>
+      <h2>Miranda Goshawk</h2>
+      {
+        data ?       <div className="spell-container ">
+        {cleanedData?.map((obj) => (
+          <Spell name={obj.name} incantation={obj.incantation} key={obj.id} />
+        ))}
+      </div> :
+      <h1     style={{ fontFamily: "Cormorant Garamond" }}>Like a portkey gone astray, the API has eluded our grasp. </h1>
+      }
 
-      <p className="">
-        Endpoint <select onChange={handleEndpointChange}>
-          <option value="books">books</option>
-          <option value="characters">characters</option>
-          <option value="movies">movies</option>
-          <option value="potions">potions</option>
-          <option value="spells">spells</option>
-        </select>
-      </p>
-      <p className="">
-        Search by Name {searchTerm}
-        <input onChange={handleSearchChange}></input>
-      </p>
-      <p>
-        Attribute <select onChange={handleAttributeChange}>{input?.data[0]?.attributes && availableAttributes()}</select>
-      </p>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-around",
-        }}
-      >
-        <div className="">
-          <p>{input && `Name`}</p>
-          <p className="">{searchTerm ? renderSearchResults : renderData}</p>
-        </div>
-        <div className="">
-          <p>Attribute: {attribute}</p>
-          <p className="">{renderSearchAttribute}</p>
-        </div>
-      </div>
+      <h2>
+        Api from{" "}
+        <a
+          href="https://github.com/MossPiglets/WizardWorldAPI"
+          target="_blank"
+          rel="noreferrer"
+        >
+          MossPiglets
+        </a>
+      </h2>
+      <h2>
+        Font from{" "}
+        <a
+          href="https://fonts.google.com/specimen/Cedarville+Cursive/about?query=Cedarville+Cursive"
+          target="_blank"
+          rel="noreferrer"
+          style={{ fontFamily: "Cedarville Cursive" }}
+        >
+          Kimberly Geswein
+        </a> &
+      </h2>
+      <h2>
+        {" "}
+        <a
+          href="https://fonts.google.com/specimen/Cormorant+Garamond/about?query=Christian+Thalmann"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Christian Thalmann{" "}
+        </a>
+      </h2>
     </>
   )
+}
+
+function Spell({ name, incantation }) {
+  const [clicked, setClicked] = useState(false)
+  function toggleClicked() {
+    setClicked((clicked) => !clicked)
+  }
+  return (
+    <div>
+      <button onClick={toggleClicked}>
+        {!clicked && name}
+        {clicked && <Incantation incantation={incantation} />}{" "}
+      </button>
+    </div>
+  )
+}
+
+function Incantation({ incantation }) {
+  return <>{incantation}</>
 }
