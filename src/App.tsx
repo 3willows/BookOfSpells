@@ -3,8 +3,8 @@ import { useState, useEffect } from "react"
 import "./App.css"
 
 export default function App() {
-  const [data, setData] = useState<any>(null)
-  const [loader, setLoader]= useState<String |null>(null)
+  const [data, setData] = useState(null)
+  const [loader, setLoader]= useState(null)
 
   useEffect(() => {
     setLoader("Loading...")
