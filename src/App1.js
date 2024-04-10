@@ -3,8 +3,10 @@ import "./App.css"
 
 export default function App() {
   const [data, setData] = useState(null)
+  const [loader, setLoader] = useState(null)
 
   useEffect(() => {
+    setLoader("Loading...")
     const fetchData = async () => {
       try {
         const response = await fetch(
@@ -12,8 +14,10 @@ export default function App() {
         )
         const result = await response.json()
         setData(result)
+        setLoader(null)
       } catch (error) {
         console.error("Error fetching data:", error)
+        setLoader("Like a portkey gone astray, the API has eluded our grasp.")
       }
     }
     fetchData()
@@ -31,14 +35,14 @@ export default function App() {
       <h1>Book of Spells</h1>
       <h2>by</h2>
       <h2>Miranda Goshawk</h2>
-      {
-        data ?       <div className="spell-container ">
-        {cleanedData?.map((obj) => (
-          <Spell name={obj.name} incantation={obj.incantation} key={obj.id} />
-        ))}
-      </div> :
-      <h1     style={{ fontFamily: "Cormorant Garamond" }}>Like a portkey gone astray, the API has eluded our grasp. </h1>
-      }
+      <h1>{loader}</h1>
+      {data && (
+        <div className="spell-container ">
+          {cleanedData?.map((obj) => (
+            <Spell name={obj.name} incantation={obj.incantation} key={obj.id} />
+          ))}
+        </div>
+      )}
 
       <h2>
         Api from{" "}
@@ -59,16 +63,16 @@ export default function App() {
           style={{ fontFamily: "Cedarville Cursive" }}
         >
           Kimberly Geswein
-        </a> &
+        </a>
+        &
       </h2>
       <h2>
-        {" "}
         <a
           href="https://fonts.google.com/specimen/Cormorant+Garamond/about?query=Christian+Thalmann"
           target="_blank"
           rel="noreferrer"
         >
-          Christian Thalmann{" "}
+          Christian Thalmann
         </a>
       </h2>
     </>
